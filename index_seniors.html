@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="fav_icon2.ico">
-  <title>cbt.canaanlandmodelschools.org</title>
+  <title>portal.canaanlandmodelschools.org</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -20,7 +20,7 @@
       --background-color: #f5f5f5;
       --text-color: #333;
       --card-bg: white;
-      --header-bg: #008000;
+      --header-bg: blue;
       --header-text: white;
       --nav-bg: #006400;
       --input-border: #ddd;
@@ -64,7 +64,7 @@
     }
 
     nav {
-      background-color: var(--nav-bg);
+      background-color: blue; /*var(--nav-bg);*/
       padding: 15px 0;
       margin-bottom: 25px;
       border-radius: 8px;
@@ -261,7 +261,7 @@
       <div class="logo-container">
         <div class="logo"><img src="img/templogo1.jpg" alt="School Logo" width="80" height="80"></div>
       </div>
-        <p>CANAANLAND MODEL SCHOOLS TERMINAL ACADEMIC REPORT SHEET PORTAL</p>
+      <p>CANAANLAND MODEL SCHOOLS TERMINAL ACADEMIC REPORT SHEET PORTAL</p>
     </header>
 
     <div class="welcome-message">
@@ -277,9 +277,7 @@
         <div class="section-body">
           <label>Select Class:</label>
           <select id="classSelect">
-            <!--<option value="jss1">JSS1</option>
-            <option value="jss2">JSS2</option>
-            <option value="jss3">JSS3</option>-->
+          
             <option value="ss1">SS1</option>
             <option value="ss2">SS2</option>
             <option value="ss3">SS3</option>
@@ -325,15 +323,13 @@
     </div>
 
     <div class="windows-activate">
-      <p>&copy; portal.canaanlandmodelschools.org</p>
+      <p>&copy; portal.canaalandmodelschools.org</p>
     </div>
   </div>
 
 <script>
 // Static password arrays for all classes
 const passwords = [
-
-  
   // SS1
   { class: "ss1", session: "2024/2025", term: "First_term", password: "ss1_2024_first" },
   { class: "ss1", session: "2024/2025", term: "Second_term", password: "ss1_2024_second" },
@@ -365,7 +361,9 @@ const passwords = [
   { class: "ss3", session: "2025/2026", term: "Third_term", password: "ss3_2025_third" },
   { class: "ss3", session: "2026/2027", term: "First_term", password: "ss3_2026_first" },
   { class: "ss3", session: "2026/2027", term: "Second_term", password: "ss3_2026_second" },
-  { class: "ss3", session: "2026/2027", term: "Third_term", password: "ss3_2026_third" }
+  { class: "ss3", session: "2026/2027", term: "Third_term", password: "ss3_2026_third" },
+  
+  
 ];
 
 document.getElementById('user').innerText = sessionStorage.getItem('username') || 'Student';
