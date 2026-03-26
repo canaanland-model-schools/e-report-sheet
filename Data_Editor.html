@@ -248,6 +248,7 @@
     <div class="action-buttons">
         <button class="big-btn" id="exportCsvBtn">📊 EXPORT SUBJECTS CSV</button>
         <button class="big-btn" id="exportJsonBtn">⬇️ EXPORT .JSON (full)</button>
+        <button class="big-btn" onclick="logout()">⬇️BACK TO DASHBOARD</button>
     </div>
     <!--<p style="text-align:center">JSON matches the exact structure used in the report card.</p>-->
 </div>
@@ -522,8 +523,11 @@
             link.click();
         });
     })();
+      function logout() {
+        //sessionStorage.clear();
+        window.location.href = 'index.html';
+    }
 </script>
-<!-- brief instruction -->
-<!--<p style="max-width:1100px; background: #cfe1d8; padding: 10px; border: 2px solid black;">⬆ Use the editor to modify any entry. "EXPORT SUBJECTS CSV" creates a CSV with subject rows (for excel). "EXPORT .JSON" produces the exact JSON structure shown above. You can add/remove rows with the buttons.</p>-->
+
 </body>
 </html>
