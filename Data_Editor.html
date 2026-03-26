@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Card Data Editor · export JSON/CSV</title>
+    <style>
+     
+         body {
+            position: relative;
+            z-index: 1;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: aqua; /*#f0f8f0;*/
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('img/Ctemplogo.jpg') no-repeat center center;
+            background-size: 300px 300px;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .form-container {
+            max-width: 1300px;
+            width: 100%;
+            background: aqua;/*#f9f7e8;*/
+            border: 4px solid #1e4a5f;
+            padding: 20px 25px;
+            box-shadow: 12px 12px 0 #1d3b30;
+            margin-bottom: 30px;
+        }
+        h1 {
+            text-align: center;
+            color: red;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-top: 0;
+            border-bottom: 4px double #8a2be2;
+            padding-bottom: 10px;
+        }
+        h2 {
+            background: blue;
+            color: white;
+            padding: 6px 18px;
+            font-size: 1.4rem;
+            border-left: 12px solid #ff66ff;
+            margin: 30px 0 15px 0;
+        }
+        .section {
+            background: #f1efe0;
+            border: 2px solid #375e6b;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: flex-end;
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+        .field-group label {
+            font-weight: 700;
+            color: #01303f;
+            margin-bottom: 4px;
+        }
+        .field-group input, .field-group textarea {
+            padding: 8px 10px;
+            border: 2px solid #2f6c7a;
+            background: #fffdf2;
+            font-size: 1rem;
+            border-radius: 0;
+        }
+        .subject-grid, .fee-grid, .psychomotor-grid, .affective-grid, .gradekey-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .subject-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #dadfcb;
+            padding: 8px 10px;
+            border-left: 8px solid #005f73;
+        }
+        .subject-row input {
+            width: 90px;
+            padding: 6px;
+            border: 1px solid #0a4b5c;
+        }
+        .subject-row input:first-child { width: 140px; }  /* subject name */
+        .remove-btn {
+            background: #b13e3e;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .add-btn {
+            background: #1f6d7a;
+            color: white;
+            border: none;
+            padding: 10px 26px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 40px;
+            border: 2px solid #f0f;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0 10px;
+            flex-wrap: wrap;
+        }
+        .big-btn {
+            background: #1b4b5e;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 3px solid #ffb3ff;
+            box-shadow: 5px 5px 0 #022b36;
+        }
+        .big-btn:hover {
+            background: #0f6677;
+            transform: translate(2px,2px);
+            box-shadow: 3px 3px 0 #022b36;
+        }
+        .inline-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #023047;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            font-family: monospace;
+        }
+        .note {
+            background: #fed6b3;
+            padding: 6px;
+            border-left: 8px solid #c77dff;
+            margin: 10px 0;
+        }
+         #logo img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+         .windows-activate {
+            text-align: center;
+            margin-top: 30px;
+            color: #333;
+            font-size: 14px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+     <div id="logo">
+            <img src="img/Ctemplogo.png" alt="COLLEGE CBT PORTAL">
+
+        </div>
+<div class="form-container">
+    <h1>✎ REPORT CARD DATA EDITOR</h1>
+    <!--<p class="note">Modify fields below — structure matches the required JSON. Use export buttons to get CSV (subjects only) or full JSON.</p>-->
+
+    <!-- student basic -->
+    <div class="section">
+        <h2>👤 STUDENT</h2>
+        <div class="flex-row">
+            <div class="field-group">
+                <label>Student name</label>
+                <input type="text" id="studentName" value="DEFAULT">
+            </div>
+            <div class="field-group">
+                <label>Class</label>
+                <input type="text" id="studentClass" value="DEFAULT">
+            </div>
+        </div>
+    </div>
+
+    <!-- SUBJECTS table (10 columns + subject name) -->
+    <div class="section">
+        <h2>📚 SUBJECTS : [NAME: SUBJECTS] test1,  test2, test3, avg, exam, last cum, f+g/2, class aw, grade, remarks)</h2>
+        <div id="subjectsContainer" class="subject-grid">
+            <!-- dynamic rows -->
+        </div>
+        <button class="add-btn" id="addSubjectRow">➕ ADD SUBJECT ROW</button>
+    </div>
+
+    <!-- PSYCHOMOTOR (array of "SKILL: GRADE") -->
+    <div class="section">
+        <h2>🏃 PSYCHOMOTOR (format "SKILL: GRADE")</h2>
+        <div id="psychomotorContainer" class="psychomotor-grid"></div>
+        <button class="add-btn" id="addPsychomotor">➕ ADD PSYCHOMOTOR</button>
+    </div>
+
+    <!-- AFFECTIVE (array of "TRAIT: GRADE") -->
+    <div class="section">
+        <h2>❤️ AFFECTIVE (format "TRAIT: GRADE")</h2>
+        <div id="affectiveContainer" class="affective-grid"></div>
+        <button class="add-btn" id="addAffective">➕ ADD AFFECTIVE</button>
+    </div>
+
+    <!-- GRADE KEY (array "description|code") -->
+    <div class="section">
+        <h2>🔤 GRADE KEY (format "description|code" e.g. "5 EXCELLENT|A")</h2>
+        <div id="gradekeyContainer" class="gradekey-grid"></div>
+        <button class="add-btn" id="addGradeKey">➕ ADD GRADE ENTRY</button>
+    </div>
+
+    <!-- FEES table (bill, naira, kobo) -->
+    <div class="section">
+        <h2>💰 FEES (bill , naira , kobo)</h2>
+        <div id="feesContainer" class="fee-grid"></div>
+        <button class="add-btn" id="addFeeRow">➕ ADD FEE ROW</button>
+    </div>
+
+    <!-- export buttons -->
+    <div class="action-buttons">
+        <button class="big-btn" id="exportCsvBtn">📊 EXPORT SUBJECTS CSV</button>
+        <button class="big-btn" id="exportJsonBtn">⬇️ EXPORT .JSON (full)</button>
+    </div>
+    <!--<p style="text-align:center">JSON matches the exact structure used in the report card.</p>-->
+</div>
+
+    <div class="windows-activate">
+        <p> &copy; cbt.<span style="color: red;">canaanlandmodelgroupof</span><span style="color: green;">schools</span>.org</p>
+    </div>
+
+<script>
+    (function() {
+        // ---------- initial data (default) ----------
+        const defaultSubjects = [
+            ["ENGLISH LANG.", "34","40","58","44","41","43","0","21","53","59 PASS"],
+            ["MATHEMATICS", "50","60","65","58","55","62","0","56","71","CS CREDIT"],
+            ["DIGITAL TECHN", "60","70","100","67","72","69","0","68","83","GOOD CREDIT"],
+            ["CITIZENSHIP STUDIES", "50","60","50","51","58","57","0","57","56","CS CREDIT"],
+            ["CRS", "70","62","50","61","58","59","0","59","57","CS CREDIT"],
+            ["FRENCH", "50","56","40","49","58","53","0","53","60","CS CREDIT"],
+            ["YORUBA", "80","45","55","60","45","53","0","53","60","CS CREDIT"],
+            ["BUSINESS STUDIES", "50","60","50","51","58","57","0","57","56","CS CREDIT"],
+            ["CULTURAL ART", "70","62","50","61","58","59","0","59","57","CS CREDIT"],
+            ["HISTORY", "50","56","40","49","58","53","0","53","60","CS CREDIT"],
+            ["PHE", "80","45","55","60","45","53","0","53","60","CS CREDIT"],
+            ["INTERMEDIATE SCIENCE", "80","45","55","60","45","53","0","53","60","CS CREDIT"]
+        ];
+        const defaultPsychomotor = [
+            "CREATIVITY: B", "VERBAL FLUENCY: B", "GAMES: B", "SPORTS: B"
+        ];
+        const defaultAffective = [
+            "PUNCTUALITY: B", "NEATNESS: B", "POLITENESS: B", "HONESTY: B",
+            "RELATIONSHIP: B", "EMOTIONAL STABILITY: B", "HEALTH: B",
+            "ATTITUDE TO SCHOOL WORK: B", "ATTENTIVENESS: B"
+        ];
+        const defaultGradeKey = [
+            "5 EXCELLENT|A", "4 GOOD|B", "3 AVERAGE|C", "2 FAIR|D", "1 POOR|E"
+        ];
+        const defaultFees = [
+            { bill: "School fees", naira: "45,000", kobo: "50" },
+            { bill: "Bus fees", naira: "12,500", kobo: "00" },
+            { bill: "Total report fees", naira: "3,200", kobo: "75" },
+            { bill: "Library / ICT levy", naira: "5,000", kobo: "00" },
+            { bill: "Sports / uniform", naira: "2,800", kobo: "25" },
+            { bill: "TOTAL", naira: "68,500", kobo: "50" }
+        ];
+
+        // ----- helpers to build DOM elements -----
+        function createSubjectRow(values = ["", "", "", "", "", "", "", "", "", "", ""]) {
+            const row = document.createElement('div');
+            row.className = 'subject-row';
+            // subject name (index 0)
+            const nameInput = document.createElement('input');
+            nameInput.placeholder = 'Subject';
+            nameInput.value = values[0] || '';
+            row.appendChild(nameInput);
+            // 10 data fields
+            for (let i = 1; i <= 10; i++) {
+                const inp = document.createElement('input');
+                inp.placeholder = `col${i}`;
+                inp.value = (values[i] !== undefined) ? values[i] : '';
+                row.appendChild(inp);
+            }
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '✖';
+            removeBtn.onclick = () => row.remove();
+            row.appendChild(removeBtn);
+            return row;
+        }
+
+        function createPsychomotorRow(value = "CREATIVITY: B") {
+            const row = document.createElement('div');
+            row.style.display = 'flex'; row.style.gap = '8px'; row.style.alignItems = 'center';
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = value;
+            input.style.flex = '1';
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '✖';
+            removeBtn.onclick = () => row.remove();
+            row.appendChild(input);
+            row.appendChild(removeBtn);
+            return row;
+        }
+
+        function createAffectiveRow(value = "PUNCTUALITY: B") {
+            const row = document.createElement('div');
+            row.style.display = 'flex'; row.style.gap = '8px'; row.style.alignItems = 'center';
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = value;
+            input.style.flex = '1';
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '✖';
+            removeBtn.onclick = () => row.remove();
+            row.appendChild(input);
+            row.appendChild(removeBtn);
+            return row;
+        }
+
+        function createGradeKeyRow(value = "5 EXCELLENT|A") {
+            const row = document.createElement('div');
+            row.style.display = 'flex'; row.style.gap = '8px'; row.style.alignItems = 'center';
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = value;
+            input.style.flex = '1';
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '✖';
+            removeBtn.onclick = () => row.remove();
+            row.appendChild(input);
+            row.appendChild(removeBtn);
+            return row;
+        }
+
+        function createFeeRow(bill = "", naira = "", kobo = "") {
+            const row = document.createElement('div');
+            row.style.display = 'flex'; row.style.gap = '8px'; row.style.alignItems = 'center'; row.style.flexWrap = 'wrap';
+            const billInp = document.createElement('input');
+            billInp.placeholder = 'bill';
+            billInp.value = bill;
+            const nairaInp = document.createElement('input');
+            nairaInp.placeholder = 'naira';
+            nairaInp.value = naira;
+            const koboInp = document.createElement('input');
+            koboInp.placeholder = 'kobo';
+            koboInp.value = kobo;
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '✖';
+            removeBtn.onclick = () => row.remove();
+            row.appendChild(billInp);
+            row.appendChild(nairaInp);
+            row.appendChild(koboInp);
+            row.appendChild(removeBtn);
+            return row;
+        }
+
+        // ----- load containers -----
+        const subjectsDiv = document.getElementById('subjectsContainer');
+        const psychomotorDiv = document.getElementById('psychomotorContainer');
+        const affectiveDiv = document.getElementById('affectiveContainer');
+        const gradekeyDiv = document.getElementById('gradekeyContainer');
+        const feesDiv = document.getElementById('feesContainer');
+
+        function loadDefault() {
+            // subjects
+            defaultSubjects.forEach(rowData => {
+                subjectsDiv.appendChild(createSubjectRow(rowData));
+            });
+            // psychomotor
+            defaultPsychomotor.forEach(val => {
+                psychomotorDiv.appendChild(createPsychomotorRow(val));
+            });
+            // affective
+            defaultAffective.forEach(val => {
+                affectiveDiv.appendChild(createAffectiveRow(val));
+            });
+            // gradekey
+            defaultGradeKey.forEach(val => {
+                gradekeyDiv.appendChild(createGradeKeyRow(val));
+            });
+            // fees
+            defaultFees.forEach(f => {
+                feesDiv.appendChild(createFeeRow(f.bill, f.naira, f.kobo));
+            });
+        }
+        loadDefault();
+
+        // add buttons
+        document.getElementById('addSubjectRow').addEventListener('click', () => {
+            subjectsDiv.appendChild(createSubjectRow(["","","","","","","","","","",""]));
+        });
+        document.getElementById('addPsychomotor').addEventListener('click', () => {
+            psychomotorDiv.appendChild(createPsychomotorRow("NEW SKILL: A"));
+        });
+        document.getElementById('addAffective').addEventListener('click', () => {
+            affectiveDiv.appendChild(createAffectiveRow("NEW TRAIT: A"));
+        });
+        document.getElementById('addGradeKey').addEventListener('click', () => {
+            gradekeyDiv.appendChild(createGradeKeyRow("DESCRIPTION|CODE"));
+        });
+        document.getElementById('addFeeRow').addEventListener('click', () => {
+            feesDiv.appendChild(createFeeRow("new bill", "0", "0"));
+        });
+
+        // ----- build JSON from current form -----
+        function collectJSON() {
+            const studentName = document.getElementById('studentName').value;
+            const studentClass = document.getElementById('studentClass').value;
+
+            // subjects : array of arrays (length 11)
+            const subjectRows = Array.from(subjectsDiv.children).map(row => {
+                const inputs = row.querySelectorAll('input');
+                return Array.from(inputs).slice(0,11).map(inp => inp.value); // first 11 inputs (name +10)
+            });
+
+            // psychomotor : array of strings
+            const psychomotor = Array.from(psychomotorDiv.children).map(row => {
+                return row.querySelector('input')?.value || '';
+            }).filter(v => v.trim() !== '');
+
+            // affective
+            const affective = Array.from(affectiveDiv.children).map(row => {
+                return row.querySelector('input')?.value || '';
+            }).filter(v => v.trim() !== '');
+
+            // gradeKey
+            const gradeKey = Array.from(gradekeyDiv.children).map(row => {
+                return row.querySelector('input')?.value || '';
+            }).filter(v => v.trim() !== '');
+
+            // fees
+            const fees = [];
+            Array.from(feesDiv.children).forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                if (inputs.length >= 3) {
+                    fees.push({
+                        bill: inputs[0].value,
+                        naira: inputs[1].value,
+                        kobo: inputs[2].value
+                    });
+                }
+            });
+
+            return {
+                student: { name: studentName, class: studentClass },
+                subjects: subjectRows,
+                psychomotor: psychomotor,
+                affective: affective,
+                gradeKey: gradeKey,
+                fees: fees
+            };
+        }
+
+        // EXPORT JSON
+        document.getElementById('exportJsonBtn').addEventListener('click', () => {
+            const data = collectJSON();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'reportCardData.json';
+            link.click();
+        });
+
+        // EXPORT CSV (subjects only, flattened)
+        document.getElementById('exportCsvBtn').addEventListener('click', () => {
+            const data = collectJSON();
+            const subjects = data.subjects; // array of arrays
+            if (!subjects.length) return;
+
+            // header: Subject, Test1,Test2,Test3,Avg,Exam,LastCum,F+G/2,ClassAw,Grade,Remarks
+            const header = ['Subject','Test1','Test2','Test3','A+B+C/3','Exam','Last Cum','F+G/2','Class Aw.','Grade','Remarks'];
+            const csvRows = [];
+            csvRows.push(header.join(','));
+
+            subjects.forEach(row => {
+                // row has 11 entries (subject + 10 scores)
+                const escaped = row.map(cell => {
+                    let str = cell.replace(/"/g, '""'); // escape quotes
+                    return `"${str}"`;
+                }).join(',');
+                csvRows.push(escaped);
+            });
+
+            const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'subjects_data.csv';
+            link.click();
+        });
+    })();
+</script>
+<!-- brief instruction -->
+<!--<p style="max-width:1100px; background: #cfe1d8; padding: 10px; border: 2px solid black;">⬆ Use the editor to modify any entry. "EXPORT SUBJECTS CSV" creates a CSV with subject rows (for excel). "EXPORT .JSON" produces the exact JSON structure shown above. You can add/remove rows with the buttons.</p>-->
+</body>
+</html>
