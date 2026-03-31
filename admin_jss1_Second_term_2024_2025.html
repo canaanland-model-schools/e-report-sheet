@@ -13,7 +13,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 8px;              /* smaller outer padding */
-            background-color: #c0d4d4;
+            background-color: aqua;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -26,12 +26,30 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('img/Ctemplogo.png') no-repeat center center;
+            background: url('img/wisdom_logo1.png') no-repeat center center;
             background-size: 250px 250px;
-            opacity: 0.05;
+            opacity: 0.8;
             z-index: 0;
             pointer-events: none;
+
         }
+          /* MAIN CARD – narrower padding, smaller fonts */
+        .report-card {
+            max-width: 1100px;
+            width: 100%;
+            background: rgb(200 150 200); /*fuchsia;/*#fefef7;*/
+            padding: 12px 16px 12px 16px;    /* reduced padding */
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+            border: 2px solid #1a1e2b;
+            position: relative;
+            z-index: 2;
+            font-size: 0.85rem;   
+            /*background: url('img/wisdom_logo1.png') no-repeat center center;*/
+            background-size: 250px 250px;
+            opacity: 0.8;
+            z-index: 0;            /* base font shrink */
+        }
+
 
         .action-bar {
             max-width: 1100px;
@@ -61,19 +79,7 @@
             box-shadow: 2px 2px 0 #0b2b35;
         }
 
-        /* MAIN CARD – narrower padding, smaller fonts */
-        .report-card {
-            max-width: 1100px;
-            width: 100%;
-            background: #fefef7;
-            padding: 12px 16px 12px 16px;    /* reduced padding */
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
-            border: 2px solid #1a1e2b;
-            position: relative;
-            z-index: 2;
-            font-size: 0.85rem;               /* base font shrink */
-        }
-
+      
         /* HEADER */
         .school-header {
             text-align: center;
@@ -172,6 +178,17 @@
             text-decoration: underline overline wavy #3a2618;
             margin: 8px 0 2px 0;
             letter-spacing: 1px;
+        }
+         .logout-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background-color: crimson;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         /* main grade table - smaller text */
@@ -296,17 +313,21 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
+        <!--<div>
+      <img src="img/Ctemplogo.png" style="margin-bottom:15px; width: 400px; height: 120px" />
+    </div>-->
   
-
+       <div class="logout-btn"><button onclick="logout()">logout</button></div>
     <div class="report-card" id="reportCard">
         <!-- logo left / student right – compact version -->
+      
         <div class="logo-student-row">
             <div class="logo-box">
                 <img src="img/Ctemplogo.png" alt="school crest"/>
             </div>
             <div class="student-box">
-                <img id="userImage" src="img/admin.png" alt="Student Image">
+                <img id="userImage" src="img/cmgs101.jpg" alt="Student Image">
             </div>
         </div>
 
@@ -317,17 +338,17 @@
         </div>
 
         <div style="text-align: center; margin-top: 2px;">
-            <h2 id="username" style="margin:2px; font-size:1.2rem; color:#b02e8b;">OMOLÉ SEFUNMI</h2>
+            <h2 id="username" style="margin:2px; font-size:1.2rem; color:#b02e8b;">FELIX VICTOR</h2>
         </div>
 
         <div class="assess-line">
             <span>CONTINUOUS ASSESSMENT: 2025/2026</span>
-            <span>TERM: FIRST</span>
+            <span>TERM: SECOND</span>
         </div>
 
         <div class="identity">
-            <p><strong>NAME:</strong> <span id="studentNameDisplay">OMOLÉ SEFUNMI</span></p>
-            <p><strong>CLASS:</strong> <span id="studentClassDisplay">SSS 3</span></p>
+            <p><strong>NAME:</strong> <span id="studentNameDisplay">FELIX VICTOR</span></p>
+            <p><strong>CLASS:</strong> <span id="studentClassDisplay">JSS 1</span></p>
         </div>
 
         <center><div class="cognitive-title">TERMINAL REPORT SHEET</div></center>
@@ -359,8 +380,8 @@
 
         <!-- vacation + comments -->
         <div class="vacation-row">
-            <span><strong>VACATION:</strong> 12 DEC 2025</span>
-            <span><strong>RESUMPTION:</strong> 5 JAN 2025</span>
+            <span><strong>VACATION:</strong> 12 MARCH 2026</span>
+            <span><strong>RESUMPTION:</strong> 5 APRIL 2026</span>
         </div>
 
         <div class="comment-block">
@@ -376,24 +397,108 @@
     </div>
       <div class="action-bar">
         <button class="btn" id="printBtn">🖨️ PRINT</button>
-        <button class="btn" id="pdfBtn">📄 PDF</button>
-        <button class="btn" id="csvBtn">📊 CSV</button>
+        <button class="btn" id="pdfBtn">📄 DOWNLOAD AS PDF</button>
+        <!--<button class="btn" id="csvBtn">📊 CSV</button>-->
     </div>
 
     <script>
+
+          /*(function() {
+                // Override the browser's save function
+                document.addEventListener('keydown', function(event) {
+                    if (event.ctrlKey && (event.key === 's' || event.key === 'S' || event.code === 'KeyS')) {
+                        
+                        // Extreme prevention
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        
+                        // Disable all event listeners temporarily
+                        event.target.addEventListener('keydown', function(e) {
+                            e.preventDefault();
+                            return false;
+                        }, { once: true });
+                        
+                        // Show alert 3 times with countdown
+                        let alertCount = 0;
+                        function showNextAlert() {
+                            alertCount++;
+                            if (alertCount === 1) alert('Done! (1/3)');
+                            if (alertCount === 2) alert('Done! (2/3)');
+                            if (alertCount === 3) {
+                                alert('Done! (3/3) - Redirecting...');
+                                window.location.href = 'index.html';
+                            }
+                        }
+                        
+                        // Show first alert immediately
+                        showNextAlert();
+                        
+                        // Schedule the next two alerts
+                        setTimeout(showNextAlert, 300);
+                        setTimeout(showNextAlert, 600);
+                        
+                        return false;
+                    }
+                }, { capture: true }); // Use capture phase to catch event first
+                
+                // Also override the save shortcut at window level
+                window.onkeydown = function(event) {
+                    if (event.ctrlKey && (event.key === 's' || event.key === 'S' || event.code === 'KeyS')) {
+                        event.preventDefault();
+                        return false;
+                    }
+                };
+            })();*/
+                  // Nuclear option - completely disable Ctrl+S
+                    document.addEventListener('keydown', function(e) {
+                        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            // Your custom behavior
+                            let i = 0;
+                            const interval = setInterval(function() {
+                                alert('The Action You are trying to perform is disabled !');
+                                i++;
+                                if (i === 3) {
+                                    clearInterval(interval);
+                                    window.location.href = 'index.html';
+                                }
+                            }, 300);
+                            
+                            return false;
+                        }
+                    }, { capture: true, passive: false });
+
+                    // Also block on window
+                    window.addEventListener('beforeunload', function(e) {
+                        // This prevents the default save dialog
+                        return null;
+                    });
+
+
+
+
+
         (function() {
             // ======================== JSON DATA ========================
             const reportData = {
-                student: { name: "OMOLÉ SEFUNMI", class: "SSS 3" },
+                student: { name: "FELIX VICTOR", class: "JSSS 1" },
                 subjects: [
-                    ["ENGLISH LANG.", 34,40,58,44,41,43,0,21,53,"59 PASS"],
-                    ["GEN MATHS", 50,60,65,58,55,62,0,56,71,"CS CREDIT"],
-                    ["DIGITAL TECHN", 60,70,100,67,72,69,0,68,83,"GOOD CREDIT"],
-                    ["CITIZ HERI ST", 50,60,50,51,58,57,0,57,56,"CS CREDIT"],
+                    ["ENGLISH LANGUAGE.", 34,40,58,44,41,43,0,21,53,"59 PASS"],
+                    ["MATHEMATICS", 50,60,65,58,55,62,0,56,71,"CS CREDIT"],
+                    ["DIGITAL TECHNOLOGY", 60,70,100,67,72,69,0,68,83,"GOOD CREDIT"],
+                    ["CITIZENSHIP & HERITAGE ST", 50,60,50,51,58,57,0,57,56,"CS CREDIT"],
                     ["CRK", 70,62,50,61,58,59,0,59,57,"CS CREDIT"],
-                    ["GOVERNMENT", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["HISTORY", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
                     ["YORUBA", 80,45,55,60,45,53,0,53,60,"CS CREDIT"],
-                    ["LITERATURE", "-","-","-","-","-","-","-","-","-","-"]
+                    ["PHE", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["FRENCH", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["SOCIAL STUDIES", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["BUSINESS STUDIES", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["BASIC SCIENCE", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["CCA", "-","-","-","-","-","-","-","-","-","-"]
                 ],
                 psychomotor: [
                     "CREATIVITY: B", "VERBAL FLUENCY: B", "GAMES: B", "SPORTS: B"
@@ -493,6 +598,39 @@
                 link.click();
             });
         })();
+
+
+               // Aggressive override of Ctrl+S
+          
+                          
+
+                    // Simple, clean, and effective Ctrl+S override
+                    /*document.addEventListener('keydown', function(event) {
+                        if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
+                            // Block the save dialog
+                            event.preventDefault();
+                            
+                            // Show alert 3 times
+                            alert('Done!');
+                            
+                            setTimeout(() => {
+                                alert('Done!');
+                            }, 300);
+                            
+                            setTimeout(() => {
+                                alert('Done!');
+                                window.location.href = 'index.html';
+                            }, 600);
+                            
+                            return false;
+                        }
+                    }, { capture: true });*/
+
+
+
+        function logout(){
+            window.location.href = "index.html";
+        }
     </script>
 </body>
 </html>
