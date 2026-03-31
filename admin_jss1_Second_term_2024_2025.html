@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canaanland · compact 1‑page print</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        /* GLOBAL TIGHTENING – everything reduced to fit ONE PAGE */
+        body {
+            position: relative;
+            z-index: 1;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 8px;              /* smaller outer padding */
+            background-color: #c0d4d4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('img/Ctemplogo.png') no-repeat center center;
+            background-size: 250px 250px;
+            opacity: 0.05;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .action-bar {
+            max-width: 1100px;
+            width: 100%;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 5;
+        }
+        .btn {
+            background: #1f4a5c;
+            border: none;
+            padding: 8px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 #0b2b35;
+            border: 1px solid #ff66ff;
+        }
+        .btn:hover {
+            background: #0d5e75;
+            transform: translate(1px,1px);
+            box-shadow: 2px 2px 0 #0b2b35;
+        }
+
+        /* MAIN CARD – narrower padding, smaller fonts */
+        .report-card {
+            max-width: 1100px;
+            width: 100%;
+            background: #fefef7;
+            padding: 12px 16px 12px 16px;    /* reduced padding */
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+            border: 2px solid #1a1e2b;
+            position: relative;
+            z-index: 2;
+            font-size: 0.85rem;               /* base font shrink */
+        }
+
+        /* HEADER */
+        .school-header {
+            text-align: center;
+            border-bottom: 2px double #222;
+            padding-bottom: 5px;
+            margin-bottom: 8px;
+        }
+        .school-name {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 1.6rem;                 /* was 2.1rem */
+            letter-spacing: 1px;
+            color: #1f3a4b;
+            line-height: 1.1;
+        }
+        .location {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        .motto {
+            font-style: italic;
+            font-size: 0.95rem;
+            background: #e6e9d0;
+            display: inline-block;
+            padding: 1px 20px;
+            margin: 4px 0 2px 0;
+            border-radius: 30px;
+            border: 1px dashed #2b4f5c;
+        }
+
+        /* logo + image row tighter */
+        .logo-student-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            background: linear-gradient(145deg, #b0e6ff 0%, #7ec8e0 100%);
+            padding: 6px 12px;
+            border-radius: 16px;
+            border: 2px solid #0a4b6e;
+        }
+        .logo-box {
+            border: 3px solid #FF00FF;
+            padding: 4px;
+            background: #00FFFF;
+            border-radius: 18px;
+            box-shadow: 0 0 0 2px #1E90FF;
+        }
+        .logo-box img {
+            width: 260px;                /* smaller logo */
+            height: auto;
+            max-height: 70px;
+            display: block;
+            border-radius: 6px;
+        }
+        .student-box {
+            border: 4px solid #1E90FF;
+            padding: 4px;
+            background: #FF00FF;
+            border-radius: 50px;
+            box-shadow: 0 0 0 3px #00FFFF;
+        }
+        .student-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #008000;
+            background: white;
+        }
+
+        .assess-line {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1rem;            /* reduced */
+            margin: 4px 0 2px 0;
+            padding: 0 5px;
+        }
+        .assess-line span:first-child { background: #d0d8c0; padding: 0 10px; }
+        .assess-line span:last-child { background: #e0dbb8; padding: 0 10px; }
+
+        .identity {
+            display: flex;
+            gap: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 6px 0 8px 0;
+            border: 2px solid #333;
+            padding: 4px 12px;
+            background: #f5f2da;
+        }
+        .identity p { gap: 4px; margin: 0; }
+
+        .cognitive-title {
+            font-size: 1.5rem;            /* was 1.9rem */
+            text-decoration: underline overline wavy #3a2618;
+            margin: 8px 0 2px 0;
+            letter-spacing: 1px;
+        }
+
+        /* main grade table - smaller text */
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #2f2e1f;
+            font-size: 0.7rem;            /* reduced */
+            background: white;
+        }
+        .grades-table th, .grades-table td {
+            border: 1px solid #222;
+            padding: 2px 2px;              /* tight cell */
+            text-align: center;
+        }
+        .grades-table th {
+            background: #aab5b0;
+            font-size: 0.6rem;
+            letter-spacing: 0.2px;
+        }
+        .grades-table td:first-child {
+            background: #ccc9b7;
+            font-weight: 600;
+            text-align: left;
+            padding-left: 4px;
+        }
+
+        /* three‑column row (psychomotor, affective, fee+grade) */
+        .row-three {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0 10px 0;
+            border-top: 2px double #1f2d33;
+            padding-top: 8px;
+        }
+        .psychomotor, .affective {
+            flex: 1 1 180px;
+        }
+        .psychomotor p, .affective p {
+            margin: 2px 0;
+            font-size: 0.8rem;
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px dotted #4e443a;
+            padding: 2px 0;
+        }
+        .psychomotor p strong, .affective p strong { width: 110px; }
+
+        .fee-grade-box {
+            flex: 1 1 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .grade-key-compact {
+            background: #dcd7c6;
+            padding: 5px;
+            border: 2px solid #3d3b2c;
+        }
+        .grade-key-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0px 6px;
+            font-size: 0.75rem;
+        }
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #d9f0f7;
+            border: 2px solid #1a4c5e;
+            font-size: 0.7rem;
+        }
+        .fee-table th, .fee-table td {
+            border: 1px solid #022b40;
+            padding: 3px 3px;
+        }
+        .fee-table th { font-size: 0.7rem; }
+
+        .vacation-row {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #d1cfb3;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 8px 0 6px 0;
+            border: 2px solid #35453b;
+        }
+
+        .comment-block {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 6px 0 0 0;
+        }
+        .comment {
+            flex: 1 1 240px;
+            border: 2px solid #2d4836;
+            background: #eadfcc;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+        }
+        .comment strong { font-size: 0.9rem; margin-bottom: 2px; }
+        .signature {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.2rem;
+            border-top: 1px solid black;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* print specific: force one page */
+        @media print {
+            body { background: white; padding: 0; }
+            .action-bar { display: none; }
+            .report-card { box-shadow: none; border: 1px solid black; max-width: 100%; padding: 8px; }
+            .logo-box img { max-width: 220px; }
+            .student-box img { width: 70px; height: 70px; }
+            .grades-table { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+  
+
+    <div class="report-card" id="reportCard">
+        <!-- logo left / student right – compact version -->
+        <div class="logo-student-row">
+            <div class="logo-box">
+                <img src="img/Ctemplogo.png" alt="school crest"/>
+            </div>
+            <div class="student-box">
+                <img id="userImage" src="img/admin.png" alt="Student Image">
+            </div>
+        </div>
+
+        <div class="school-header">
+            <div class="school-name">CANAANLAND MODEL GROUP OF SCHOOLS,</div>
+            <div class="location">EKUTE QUARTERS, ADO EKITI.</div>
+            <div class="motto">MOTTO: GOD IS OUR STRENGTH</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2px;">
+            <h2 id="username" style="margin:2px; font-size:1.2rem; color:#b02e8b;">OMOLÉ SEFUNMI</h2>
+        </div>
+
+        <div class="assess-line">
+            <span>CONTINUOUS ASSESSMENT: 2025/2026</span>
+            <span>TERM: FIRST</span>
+        </div>
+
+        <div class="identity">
+            <p><strong>NAME:</strong> <span id="studentNameDisplay">OMOLÉ SEFUNMI</span></p>
+            <p><strong>CLASS:</strong> <span id="studentClassDisplay">SSS 3</span></p>
+        </div>
+
+        <center><div class="cognitive-title">TERMINAL REPORT SHEET</div></center>
+
+        <!-- subject table -->
+        <table class="grades-table" id="subjectTable">
+            <thead>
+                <tr><th>SUBJECTS</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr>
+                <tr><th></th><th>T1</th><th>T2</th><th>T3</th><th>AVG</th><th>EXAM</th><th>LST</th><th>F+G/2</th><th>AW.</th><th>GRD</th><th>REM</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <!-- three‑column row: psychomotor | affective | (grade key + fee) -->
+        <div class="row-three">
+            <div class="psychomotor" id="psychomotorArea"><h3>PSYCHOMOTOR</h3></div>
+            <div class="affective" id="affectiveArea"><h3>EFFECTIVE</h3></div>
+            <div class="fee-grade-box">
+                <div class="grade-key-compact">
+                    <h3 style="margin:0 0 4px 0;">GRADE</h3>
+                    <div class="grade-key-grid" id="gradeKeyGrid"></div>
+                </div>
+                <table class="fee-table" id="feeTable">
+                    <thead><tr><th>BILL</th><th>NAIRA</th><th>KOBO</th></tr></thead>
+                    <tbody id="feeBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- vacation + comments -->
+        <div class="vacation-row">
+            <span><strong>VACATION:</strong> 12 DEC 2025</span>
+            <span><strong>RESUMPTION:</strong> 5 JAN 2025</span>
+        </div>
+
+        <div class="comment-block">
+            <div class="comment" id="teacherComment">
+                <strong>CLASS TEACHER:</strong> SHE IS RESPONSIBLE AND ACTIVE
+                <div class="signature">SIGNATURE</div>
+            </div>
+            <div class="comment" id="principalComment">
+                <strong>PRINCIPAL:</strong> AVERAGE PERFORMANCE, PUT MORE EFFORT.
+                <div class="signature">SIGNATURE</div>
+            </div>
+        </div>
+    </div>
+      <div class="action-bar">
+        <button class="btn" id="printBtn">🖨️ PRINT</button>
+        <button class="btn" id="pdfBtn">📄 PDF</button>
+        <button class="btn" id="csvBtn">📊 CSV</button>
+    </div>
+
+    <script>
+        (function() {
+            // ======================== JSON DATA ========================
+            const reportData = {
+                student: { name: "OMOLÉ SEFUNMI", class: "SSS 3" },
+                subjects: [
+                    ["ENGLISH LANG.", 34,40,58,44,41,43,0,21,53,"59 PASS"],
+                    ["GEN MATHS", 50,60,65,58,55,62,0,56,71,"CS CREDIT"],
+                    ["DIGITAL TECHN", 60,70,100,67,72,69,0,68,83,"GOOD CREDIT"],
+                    ["CITIZ HERI ST", 50,60,50,51,58,57,0,57,56,"CS CREDIT"],
+                    ["CRK", 70,62,50,61,58,59,0,59,57,"CS CREDIT"],
+                    ["GOVERNMENT", 50,56,40,49,58,53,0,53,60,"CS CREDIT"],
+                    ["YORUBA", 80,45,55,60,45,53,0,53,60,"CS CREDIT"],
+                    ["LITERATURE", "-","-","-","-","-","-","-","-","-","-"]
+                ],
+                psychomotor: [
+                    "CREATIVITY: B", "VERBAL FLUENCY: B", "GAMES: B", "SPORTS: B"
+                ],
+                affective: [
+                    "PUNCTUALITY: B", "NEATNESS: B", "POLITENESS: B", "HONESTY: B",
+                    "RELATIONSHIP: B", "EMOTIONAL STABILITY: B", "HEALTH: B",
+                    "ATTITUDE TO SCHOOL WORK: B", "ATTENTIVENESS: B"
+                ],
+                gradeKey: [
+                    "5 EXCELLENT|A", "4 GOOD|B", "3 AVERAGE|C", "2 FAIR|D", "1 POOR|E"
+                ],
+                fees: [
+                    { bill: "School fees", naira: "45,000", kobo: "50" },
+                    { bill: "Bus fees", naira: "12,500", kobo: "00" },
+                    { bill: "Total report fees", naira: "3,200", kobo: "75" },
+                    { bill: "Library / ICT levy", naira: "5,000", kobo: "00" },
+                    { bill: "Sports / uniform", naira: "2,800", kobo: "25" },
+                    { bill: "TOTAL", naira: "68,500", kobo: "50" }
+                ]
+            };
+
+            // populate subject table
+            const tbody = document.getElementById('tableBody');
+            reportData.subjects.forEach(r => {
+                let tr = document.createElement('tr');
+                r.forEach(c => { let td = document.createElement('td'); td.innerText = c; tr.appendChild(td); });
+                tbody.appendChild(tr);
+            });
+
+            // psychomotor
+            const psych = document.getElementById('psychomotorArea');
+            psych.innerHTML = '<h3>PSYCHOMOTOR</h3>';
+            reportData.psychomotor.forEach(p => {
+                let parts = p.split(': ');
+                let pEl = document.createElement('p');
+                pEl.innerHTML = `<strong>${parts[0]}:</strong> ${parts[1]}`;
+                psych.appendChild(pEl);
+            });
+
+            // affective
+            const aff = document.getElementById('affectiveArea');
+            aff.innerHTML = '<h3>EFFECTIVE AREA</h3>';
+            reportData.affective.forEach(a => {
+                let parts = a.split(': ');
+                let pEl = document.createElement('p');
+                pEl.innerHTML = `<strong>${parts[0]}:</strong> ${parts[1]}`;
+                aff.appendChild(pEl);
+            });
+
+            // grade key
+            const grid = document.getElementById('gradeKeyGrid');
+            reportData.gradeKey.forEach(g => {
+                let [desc, code] = g.split('|');
+                let div = document.createElement('div'); div.className = 'grade-key-item';
+                div.innerHTML = `<span>${desc}</span><span>${code}</span>`;
+                grid.appendChild(div);
+            });
+
+            // fee table
+            const feeBody = document.getElementById('feeBody');
+            reportData.fees.forEach(f => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `<td>${f.bill}</td><td>${f.naira}</td><td>${f.kobo}</td>`;
+                feeBody.appendChild(tr);
+            });
+
+            document.getElementById('studentNameDisplay').innerText = reportData.student.name;
+            document.getElementById('studentClassDisplay').innerText = reportData.student.class;
+            document.getElementById('username').innerText = reportData.student.name;
+
+            // ========== PRINT ==========
+            document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+            // ========== PDF (compact) ==========
+            document.getElementById('pdfBtn').addEventListener('click', function() {
+                const element = document.getElementById('reportCard');
+                html2pdf().set({ margin: 0.3, filename: 'canaanland_report.pdf', image: { type: 'jpeg', quality: 0.9 }, html2canvas: { scale: 1.5 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+            });
+
+            // ========== CSV (subjects) ==========
+            document.getElementById('csvBtn').addEventListener('click', function() {
+                const table = document.getElementById('subjectTable');
+                let csv = [];
+                let headers = [];
+                table.querySelectorAll('thead tr:first-child th').forEach(th => headers.push(th.innerText));
+                csv.push(headers.join(','));
+                table.querySelectorAll('tbody tr').forEach(tr => {
+                    let row = [];
+                    tr.querySelectorAll('td').forEach(td => row.push('"' + td.innerText.replace(/,/g,';') + '"'));
+                    csv.push(row.join(','));
+                });
+                const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'subjects.csv';
+                link.click();
+            });
+        })();
+    </script>
+</body>
+</html>
