@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="fav_icon2.ico">
+  <title>portal.canaanlandmodelschools.org</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ... (existing CSS unchanged) ... */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary-color: #008000;
+      --secondary-color: #d90000;
+      --background-color: #f5f5f5;
+      --text-color: #333;
+      --card-bg: white;
+      --header-bg: blue;
+      --header-text: white;
+      --nav-bg: #006400;
+      --input-border: #ddd;
+    }
+
+    .dark-theme {
+      --primary-color: #4CAF50;
+      --secondary-color: #ff5252;
+      --background-color: #2c2c2c;
+      --text-color: #f0f0f0;
+      --card-bg: #3c3c3c;
+      --header-bg:linear-gradient(blue, aqua, fuchsia);
+      --header-text: #f0f0f0;
+      --nav-bg: #1b5e20;
+      --input-border: #555;
+    }
+
+    body {
+      position: relative;
+      z-index: 1;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('img/templogo1.jpg') no-repeat center center;
+      background-size: 300px 300px;
+      opacity: 0.1;
+      z-index: 0;
+      pointer-events: none;
+      background-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    nav {
+      background-color: blue; /*var(--nav-bg);*/
+      padding: 15px 0;
+      margin-bottom: 25px;
+      border-radius: 8px;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-right: 20px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .nav-links a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      margin-left: 15px;
+    }
+
+    header {
+      background: linear-gradient(blue, aqua, fuchsia);/*background-color: var(--header-bg);*/
+      color: var(--header-text);
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background-color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      border: 2px solid var(--secondary-color);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .welcome-message {
+      background-color: var(--card-bg);
+      padding: 15px;
+      border-left: 5px solid var(--secondary-color);
+      margin: 20px 0;
+      font-size: 16px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center; /* Center all content inside */
+    }
+
+    .exam-sections {
+      display: flex;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .exam-section {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .section-header {
+      background: linear-gradient(blue, aqua, fuchsia); /*background-color: var(--header-bg);*/
+      color: var(--header-text);
+      padding: 15px 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .section-body {
+      padding: 25px;
+    }
+
+    /* Center password input */
+    .password-container {
+      text-align: center;
+    }
+    #examPassword {
+      width: 80%;
+      max-width: 300px;
+      padding: 8px 12px;
+      margin-top: 8px;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: var(--nav-bg);
+    }
+
+    .windows-activate {
+      text-align: center;
+      margin-top: 30px;
+      color: var(--text-color);
+      font-size: 14px;
+      padding: 15px;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #student-info {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .exam-sections {
+        flex-direction: column;
+      }
+      .nav-container {
+        flex-direction: column;
+      }
+      .nav-links {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .nav-links li {
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .logo-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+  <nav>
+    <div class="nav-container">
+      <ul class="nav-links">
+        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+        <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+        <li><a href="#services"><i class="fas fa-cogs"></i> Services</a></li>
+        <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+      </ul>
+      <div>
+        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <div class="logo"><img src="img/templogo1.jpg" alt="School Logo" width="80" height="80"></div>
+      </div>
+      <p>CANAANLAND MODEL SCHOOLS TERMINAL ACADEMIC REPORT SHEET PORTAL</p>
+    </header>
+
+    <div class="welcome-message">
+      <div id="student-info">
+        <img id="userImage" width="50" height="50"><br><br>
+      </div>
+      <h2>Welcome, <span id="user"></span></h2>
+    </div>
+
+    <div class="exam-sections">
+      <div class="exam-section">
+        <div class="section-header">SELECT CLASS □</div>
+        <div class="section-body">
+          <label>Select Class:</label>
+          <select id="classSelect">
+            <option value="jss1">JSS1</option>
+            <option value="jss2">JSS2</option>
+            <option value="jss3">JSS3</option>
+            <!--<option value="ss1">SS1</option>
+            <option value="ss2">SS2</option>
+            <option value="ss3">SS3</option>-->
+          </select>
+        </div>
+      </div>
+
+      <div class="exam-section">
+        <div class="section-header">SELECT SESSION □</div>
+        <div class="section-body">
+          <label>Select Session:</label>
+          <select id="sessionSelect">
+            <option value="2024/2025">2024/2025</option>
+            <option value="2025/2026">2025/2026</option>
+            <option value="2026/2027">2026/2027</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="exam-section">
+        <div class="section-header">SELECT TERM □</div>
+        <div class="section-body">
+          <label>Select Term:</label>
+          <select id="termSelect">
+            <option value="First_term">First Term</option>
+            <option value="Second_term">Second Term</option>
+            <option value="Third_term">Third Term</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-section">
+      <div class="section-header">ENTER PASSWORD □</div>
+      <div class="section-body">
+        <centre><label style="color: red; font-size: 18px;text-align: center;"><span style="visibility: hidden;">--------------------------------------------------------------------</span>Enter Password:</label></centre>
+        <div class="password-container">
+          <input type="password" id="examPassword">
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+      <button class="btn" type="submit" onclick="startExam()">View Result</button>
+    </div>
+
+    <div class="windows-activate">
+      <p>&copy; portal.canaalandmodelschools.org</p>
+    </div>
+  </div>
+
+<script>
+
+// ================== ANTI‑CHEAT & GLOBAL KEY HANDLERS ==================
+
+// 1. Block context menu (right‑click)
+document.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+    alert("Right‑click is disabled during examination.");
+});
+
+// 2. Block Print (Ctrl+P) and Save (Ctrl+S) globally
+document.addEventListener('keydown', function (event) {
+    if ((event.ctrlKey && event.key === 'p') || (event.ctrlKey && event.key === 's')) {
+        event.preventDefault();
+        alert("Printing and saving are disabled .");
+        return false;
+    }
+});
+
+// 3. Block developer tools (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+        (e.ctrlKey && e.key === 'u')) {
+        e.preventDefault();
+        alert("Developer tools are disabled during examination.");
+    }
+});
+
+// ================== EXAM NAVIGATION & ANSWER SELECTION ==================
+// This listener handles arrow navigation and multiple‑choice selection.
+// Note: Ctrl+S is no longer used here – it's blocked globally.
+document.addEventListener('keydown', function (event) {
+    if (currentSection === 'objectives') {
+        const key = event.key.toUpperCase();
+
+        // Answer selection for objectives (A, B, C, D)
+        if (['A', 'B', 'C', 'D'].includes(key)) {
+            const radio = document.querySelector(`input[name="option"][value="${key}"]`);
+            if (radio) {
+                radio.checked = true;
+                saveAnswer();
+            }
+        }
+
+        // Navigation with arrow keys
+        if (event.key === 'ArrowRight') {
+            nextQuestion();
+        } else if (event.key === 'ArrowLeft') {
+            prevQuestion();
+        }
+    } else if (currentSection === 'theory') {
+        // Navigation for theory
+        if (event.key === 'ArrowRight') {
+            nextTheoryQuestion();
+        } else if (event.key === 'ArrowLeft') {
+            prevTheoryQuestion();
+        }
+    }
+});
+
+
+// Define user credentials (same as login page)
+const users = [
+  // JSS1 BOYS
+  { username: "felix victor", password: "xK9mP2qR", image: "cmgs101.jpg", paid: true },
+  { username: "alpha trinity", password: "tY5nL8wZ", image: "cmgs102.jpg", paid: true },
+  { username: "ogundipe seun", password: "jH3rV6sA", image: "cmgs103.jpg", paid: true },
+  { username: "abiodun darasimi", password: "cB7fD4gE", image: "cmgs104.jpg", paid: true },
+  { username: "ibegbu emmanuel", password: "wN2kM9xP", image: "cmgs105.jpg", paid: true },
+  { username: "ajayi convenant", password: "zL6qR1tU", image: "cmgs106.jpg", paid: false },
+  { username: "fadirepo elizabeth", password: "vF4sY7hJ", image: "cmgs107.jpg", paid: true },
+
+  // JSS1 GIRLS
+  { username: "david grace", password: "eW8oI3uK", image: "cmgs108.jpg", paid: true },
+  { username: "adepoju kemisola", password: "aC5gD2bN", image: "cmgs109.jpg", paid: true },
+  { username: "ayodele adeife peace", password: "pU0zX9mQ", image: "cmgs110.jpg", paid: false },
+  { username: "fakorede fikayo esther", password: "rG1hJ6kL", image: "cmgs111.jpg", paid: true },
+  { username: "adewunmi darasimi", password: "sT7yB4cV", image: "cmgs112.jpg", paid: false },
+
+  // JSS2 BOYS
+  { username: "ojo ayomide", password: "nE3wF8iA", image: "cmgs201.jpg", paid: true },
+  { username: "olatise excel", password: "mO9pU2qL", image: "cmgs202.jpg", paid: true },
+  { username: "adewunmi tunmise", password: "kC5xZ7vB", image: "cmgs203.jpg", paid: true },
+  { username: "eyebiokin tobiloba", password: "yH4rN6dF", image: "cmgs204.jpg", paid: true },
+  { username: "oluwafemi nifemi", password: "bQ8tS1wG", image: "cmgs205.jpg", paid: true },
+  { username: "oluwatuyi olamide", password: "uV3jM0eR", image: "cmgs206.jpg", paid: true },
+  { username: "abiodun praise", password: "lX2fD9cK", image: "cmgs207.jpg", paid: true },
+  { username: "adejumo adenike", password: "oI7aP4hY", image: "cmgs208.jpg", paid: true },
+  { username: "david mercy", password: "zW6gJ5nC", image: "cmgs209.jpg", paid: true },
+  { username: "olusanya semilore", password: "tR1qB8sM", image: "cmgs210.jpg", paid: true },
+  { username: "ajibola demilade", password: "pE9kL2vN", image: "cmgs211.jpg", paid: true },
+  { username: "afeni dunusinmi", password: "sY4hU7oX", image: "cmgs212.jpg", paid: true },
+  { username: "bashiru qudus", password: "dG3cF0zA", image: "cmgs213.jpg", paid: true },
+  { username: "owolabi olamide", password: "mH6wT1rB", image: "cmgs214.jpg", paid: true },
+  { username: "erinfolami precious", password: "fC2qV9jL", image: "cmgs215.jpg", paid: true },
+  { username: "ajiboye aanu", password: "aJ8xK4yP", image: "cmgs216.jpg", paid: true },
+  { username: "isa godiya ayomikun", password: "nZ5eR7uI", image: "cmgs217.jpg", paid: true },
+
+  // JSS3 BOYS
+  { username: "abdullah kehinde", password: "oY1tG6dW", image: "cmgs301.jpg", paid: true },
+  { username: "abiodun paul", password: "cL3mU8sQ", image: "cmgs302.jpg", paid: true },
+  { username: "aluko richard taiwo", password: "xV7bH2iF", image: "cmgs303.jpg", paid: false },
+  { username: "ojo emmanuel", password: "rK9fA4jS", image: "cmgs304.jpg", paid: true },
+  { username: "olajide daniel", password: "pB4cE0gZ", image: "cmgs305.jpg", paid: true },
+  { username: "olanrewaju isreal", password: "wN2tY5hO", image: "cmgs306.jpg", paid: false },
+  { username: "olatunji samuel", password: "vD8uI3lP", image: "cmgs307.jpg", paid: true },
+  { username: "harris peace", password: "qM1sX6vC", image: "cmgs308.jpg", paid: true },
+  { username: "abdullah taiwo", password: "eH7jW4bR", image: "cmgs309.jpg", paid: true },
+  { username: "adejumo azeezat", password: "tC9pL2dF", image: "cmgs310.jpg", paid: false },
+  { username: "ajogo esther", password: "aG5fQ0nM", image: "cmgs311.jpg", paid: true },
+  { username: "alonge ayanfeoluwa", password: "yR3kU7xZ", image: "cmgs312.jpg", paid: true },
+  { username: "aluko richard kehinde", password: "bJ8iE1vA", image: "cmgs313.jpg", paid: true },
+  { username: "asaolu sefunmi", password: "sW4oP6gK", image: "cmgs314.jpg", paid: false },
+  { username: "ayodele sekemi", password: "lN6mD2hB", image: "cmgs315.jpg", paid: true },
+  { username: "isa godiya", password: "dX9rF3uI", image: "cmgs316.jpg", paid: true },
+  { username: "okunola darasimi", password: "kZ1cY8tQ", image: "cmgs317.jpg", paid: true },
+  { username: "oyinloye ibironke", password: "pU4vJ7eL", image: "cmgs318.jpg", paid: true },
+  { username: "sesan ojo wisdom", password: "mH5gT0fW", image: "cmgs319.jpg", paid: false },
+
+  // SS1
+  /*{ username: "john goodness", password: "nC2qA6xR", image: "cmgs401.jpg", paid: true },
+  { username: "ibegbu cynthia", password: "tK8sB3dZ", image: "cmgs402.jpg", paid: true },
+  { username: "eniafe success", password: "yL7zD4mG", image: "cmgs403.jpg", paid: true },
+  { username: "isa hauwa kezia", password: "oX1jF9pV", image: "cmgs404.jpg", paid: true },
+  { username: "best daniel", password: "rE3wH6uC", image: "cmgs405.jpg", paid: true },
+  { username: "ogundana henry", password: "gM5bY2qN", image: "cmgs406.jpg", paid: true },
+  { username: "olamide oluwaseun", password: "aP0fT7kS", image: "cmgs407.jpg", paid: true },
+
+  // SS2
+  { username: "aluko crown richard", password: "vW4nI8eX", image: "cmgs501.jpg", paid: true },
+  { username: "adejumo sodiq", password: "jQ1sU3rZ", image: "cmgs502.jpg", paid: true },
+  { username: "ambrose godwin", password: "fC9pD2hA", image: "cmgs503.jpg", paid: false },
+  { username: "bello george", password: "tL6gV5wO", image: "cmgs504.jpg", paid: true },
+  { username: "fadirepo semilore", password: "xK7bM0eI", image: "cmgs505.jpg", paid: true },
+  { username: "oke david", password: "uH3cR9yB", image: "cmgs506.jpg", paid: true },
+  { username: "adeoye divine", password: "iY2qF4nP", image: "cmgs507.jpg", paid: false },
+  { username: "awobiye eniola", password: "dZ8mJ1tU", image: "cmgs508.jpg", paid: true },
+  { username: "kayode racheal", password: "pE4wL7vC", image: "cmgs509.jpg", paid: true },
+  { username: "ojo eniope", password: "bS5oG0xK", image: "cmgs510.jpg", paid: false },
+  { username: "ogundipe blessing", password: "gN1iT3hQ", image: "cmgs511.jpg", paid: true },
+  { username: "olanrewaju hepzibah", password: "rF6aJ8dL", image: "cmgs512.jpg", paid: true },
+  { username: "osasono arike desola", password: "cA9yU2zM", image: "cmgs513.jpg", paid: false },
+
+  // SS3
+  { username: "oltunji emmanuel", password: "vZ3rG7pX", image: "cmgs601.jpg", paid: true },
+  { username: "adewunmi nifemi", password: "wK5bS1cT", image: "cmgs602.jpg", paid: true },
+  { username: "oluwafemi oluwatomiwa", password: "jH6xM4dF", image: "cmgs603.jpg", paid: true },
+  { username: "foluso boluwatito", password: "oP2lC9nY", image: "cmgs604.jpg", paid: true },
+  { username: "adejumo azeez", password: "eQ8vR3gJ", image: "cmgs605.jpg", paid: true },
+  { username: "ajayi sandra", password: "mT4yU0fK", image: "cmgs606.jpg", paid: true },
+  { username: "omole sefunmi", password: "qN7iE2wA", image: "cmgs607.jpg", paid: true },
+  { username: "ayebegan ayobami", password: "dC1pX6lH", image: "cmgs608.jpg", paid: true },
+  { username: "ojo success", password: "tF9bZ4vM", image: "cmgs609.jpg", paid: true },*/
+
+  // ADMIN
+  { username: "admin", password: "admin", image: "admin.png", paid: true }
+];
+
+// Get stored username from login (sessionStorage)
+const loggedInUsername = sessionStorage.getItem('username') || 'Student';
+const user = users.find(u => u.username.toLowerCase() === loggedInUsername.toLowerCase());
+
+// Set welcome message and image
+document.getElementById('user').innerText = loggedInUsername;
+if (user && user.image) {
+  document.getElementById('userImage').src = user.image;
+} else {
+  document.getElementById('userImage').src = 'img/default.png';
+}
+document.getElementById('user').innerText = sessionStorage.getItem('username');
+document.getElementById('userImage').src = sessionStorage.getItem('image');
+
+async function startExam() {
+    const enteredPassword = document.getElementById('examPassword').value;
+    const username = loggedInUsername;
+    const cls = document.getElementById('classSelect').value;
+    const session = document.getElementById('sessionSelect').value;
+    const term = document.getElementById('termSelect').value;
+
+    const matchedUser = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+    if (!matchedUser) {
+        alert('User not found. Please log in again.');
+        return;
+    }
+    if (enteredPassword !== matchedUser.password) {
+        alert('Incorrect password. Please try again.');
+        return;
+    }
+
+    sessionStorage.setItem('class', cls);
+    sessionStorage.setItem('session', session);
+    sessionStorage.setItem('term', term);
+
+    const sanitizedUsername = username.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedClass = cls.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedTerm = term.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedSession = session.replace(/[^a-zA-Z0-9]/g, '_');
+
+    const filename = `${sanitizedUsername}_${sanitizedClass}_${sanitizedTerm}_${sanitizedSession}_result.html`;
+
+    // Check if the result file exists
+    try {
+        const response = await fetch(filename, { method: 'HEAD' });
+        if (response.ok) {
+            // File exists – redirect
+            window.location.href = filename;
+        } else {
+            // File not found – redirect to default page
+            alert('Result for the selected class/session/term has not been uploaded yet.');
+            window.location.href = 'default.html';
+        }
+    } catch (error) {
+        // Network error or CORS – fallback to default page
+        console.error('Error checking file existence:', error);
+        alert('Unable to verify result. Redirecting to default page.');
+        window.location.href = 'default.html';
+    }
+}
+// Theme toggle code (unchanged)
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = themeToggle.querySelector('i');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark-theme');
+  if (document.body.classList.contains('dark-theme')) {
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  } else {
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+  }
+});
+
+// Button hover effects (unchanged)
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(button => {
+  button.addEventListener('mouseenter', () => {
+    button.style.transform = 'translateY(-2px)';
+    button.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+  });
+  button.addEventListener('mouseleave', () => {
+    button.style.transform = 'translateY(0)';
+    button.style.boxShadow = 'none';
+  });
+});
+
+
+
+
+
+</script>
+</body>
+</html>
