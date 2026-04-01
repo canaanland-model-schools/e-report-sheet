@@ -414,7 +414,7 @@ document.addEventListener('keydown', function (event) {
 // Define user credentials (same as login page)
 const users = [
   // JSS1 BOYS
-  /*{ username: "felix victor", password: "xK9mP2qR", image: "cmgs101.jpg", paid: true },
+  { username: "felix victor", password: "xK9mP2qR", image: "cmgs101.jpg", paid: true },
   { username: "alpha trinity", password: "tY5nL8wZ", image: "cmgs102.jpg", paid: true },
   { username: "ogundipe seun", password: "jH3rV6sA", image: "cmgs103.jpg", paid: true },
   { username: "abiodun darasimi", password: "cB7fD4gE", image: "cmgs104.jpg", paid: true },
@@ -467,10 +467,10 @@ const users = [
   { username: "isa godiya", password: "dX9rF3uI", image: "cmgs316.jpg", paid: true },
   { username: "okunola darasimi", password: "kZ1cY8tQ", image: "cmgs317.jpg", paid: true },
   { username: "oyinloye ibironke", password: "pU4vJ7eL", image: "cmgs318.jpg", paid: true },
-  { username: "sesan ojo wisdom", password: "mH5gT0fW", image: "cmgs319.jpg", paid: false },*/
+  { username: "sesan ojo wisdom", password: "mH5gT0fW", image: "cmgs319.jpg", paid: false },
 
   // SS1
-  { username: "john goodness", password: "nC2qA6xR", image: "cmgs401.jpg", paid: true },
+  /*{ username: "john goodness", password: "nC2qA6xR", image: "cmgs401.jpg", paid: true },
   { username: "ibegbu cynthia", password: "tK8sB3dZ", image: "cmgs402.jpg", paid: true },
   { username: "eniafe success", password: "yL7zD4mG", image: "cmgs403.jpg", paid: true },
   { username: "isa hauwa kezia", password: "oX1jF9pV", image: "cmgs404.jpg", paid: true },
@@ -502,7 +502,7 @@ const users = [
   { username: "ajayi sandra", password: "mT4yU0fK", image: "cmgs606.jpg", paid: true },
   { username: "omole sefunmi", password: "qN7iE2wA", image: "cmgs607.jpg", paid: true },
   { username: "ayebegan ayobami", password: "dC1pX6lH", image: "cmgs608.jpg", paid: true },
-  { username: "ojo success", password: "tF9bZ4vM", image: "cmgs609.jpg", paid: true },
+  { username: "ojo success", password: "tF9bZ4vM", image: "cmgs609.jpg", paid: true },*/
 
   // ADMIN
   { username: "admin", password: "admin", image: "admin.png", paid: true }
@@ -522,45 +522,52 @@ if (user && user.image) {
 document.getElementById('user').innerText = sessionStorage.getItem('username');
 document.getElementById('userImage').src = sessionStorage.getItem('image');
 
-function startExam() {
-  const enteredPassword = document.getElementById('examPassword').value;
-  const username = loggedInUsername;
-  const cls = document.getElementById('classSelect').value;
-  const session = document.getElementById('sessionSelect').value;
-  const term = document.getElementById('termSelect').value;
+async function startExam() {
+    const enteredPassword = document.getElementById('examPassword').value;
+    const username = loggedInUsername;
+    const cls = document.getElementById('classSelect').value;
+    const session = document.getElementById('sessionSelect').value;
+    const term = document.getElementById('termSelect').value;
 
-  // Find the user by username (case-insensitive)
-  const matchedUser = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+    const matchedUser = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+    if (!matchedUser) {
+        alert('User not found. Please log in again.');
+        return;
+    }
+    if (enteredPassword !== matchedUser.password) {
+        alert('Incorrect password. Please try again.');
+        return;
+    }
 
-  if (!matchedUser) {
-    alert('User not found. Please log in again.');
-    return;
-  }
+    sessionStorage.setItem('class', cls);
+    sessionStorage.setItem('session', session);
+    sessionStorage.setItem('term', term);
 
-  // Validate password against the user's stored password
-  if (enteredPassword !== matchedUser.password) {
-    alert('Incorrect password. Please try again.');
-    return;
-  }
+    const sanitizedUsername = username.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedClass = cls.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedTerm = term.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedSession = session.replace(/[^a-zA-Z0-9]/g, '_');
 
-  // Password correct – proceed to load result page
-  // Store selections for the result page
-  sessionStorage.setItem('class', cls);
-  sessionStorage.setItem('session', session);
-  sessionStorage.setItem('term', term);
+    const filename = `${sanitizedUsername}_${sanitizedClass}_${sanitizedTerm}_${sanitizedSession}_result.html`;
 
-  // Generate filename based on username, class, term, session
-  const sanitizedUsername = username.replace(/[^a-zA-Z0-9]/g, '_');
-  const sanitizedClass = cls.replace(/[^a-zA-Z0-9]/g, '_');
-  const sanitizedTerm = term.replace(/[^a-zA-Z0-9]/g, '_');
-  const sanitizedSession = session.replace(/[^a-zA-Z0-9]/g, '_');
-
-  const filename = `${sanitizedUsername}_${sanitizedClass}_${sanitizedTerm}_${sanitizedSession}_result.html`;
-
-  // Redirect to the result page
-  window.location.href = filename;
+    // Check if the result file exists
+    try {
+        const response = await fetch(filename, { method: 'HEAD' });
+        if (response.ok) {
+            // File exists – redirect
+            window.location.href = filename;
+        } else {
+            // File not found – redirect to default page
+            alert('Result for the selected class/session/term has not been uploaded yet.');
+            window.location.href = 'default.html';
+        }
+    } catch (error) {
+        // Network error or CORS – fallback to default page
+        console.error('Error checking file existence:', error);
+        alert('Unable to verify result. Redirecting to default page.');
+        window.location.href = 'default.html';
+    }
 }
-
 // Theme toggle code (unchanged)
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = themeToggle.querySelector('i');
